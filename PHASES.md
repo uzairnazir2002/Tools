@@ -85,16 +85,16 @@ Verification on 2026-09-18: frozen-lockfile install, lint, strict TypeScript, un
 
 Verification on 2026-09-18: lint, strict TypeScript, unit tests, production build, the Phase 6 Chromium browser suite, and the complete 34-test Chromium browser suite passed. The production build generated 29 static pages, including 15 tool routes and six category routes. The sitemap includes every tool and category route, robots.txt allows indexing and points to the sitemap, canonical links resolve to each route, and the tested tool-page script transfer stayed below the 1.2 MB Phase 6 browser budget. The current production origin is `https://tools-web-ten-ruddy.vercel.app`; Search Console and Bing Webmaster remain account-dashboard work until verification tokens are created and added to Vercel.
 
-## Phase 7 — legal, trust, and monetization readiness: local readiness verified, production contact pending
+## Phase 7 — legal, trust, and monetization readiness: complete and verified
 
 - [x] Expanded About, Privacy, and Terms pages with launch-ready trust, privacy, local-processing, preference-storage, accuracy, and availability copy.
 - [x] Added a Contact page and footer link. The page is ready for a real address through `NEXT_PUBLIC_CONTACT_EMAIL`.
 - [x] Recorded candidate domain `formatvalidateconvert.com` in site config for the pending contact/domain setup.
 - [x] Confirmed the current deployment has no advertising cookies, account system, or ad provider script, so no ad-consent banner is present at this stage.
 - [x] Added disabled ad-reservation regions below the interactive tool workspace, with reserved layout space and no provider script loading.
-- [ ] Configure a real production contact email after the domain is purchased and mail is configured.
+- [x] Configure a real production contact email for the current Vercel production origin.
 
-Verification on 2026-09-18: lint, strict TypeScript, unit tests, production build, dependency audit with no known vulnerabilities, the Phase 7 Chromium browser suite, and the complete 36-test Chromium browser suite passed. The production build generated 30 static pages after adding `/contact`. Browser checks verified About, Privacy, Terms, Contact, footer links, sitemap inclusion, disabled ad regions, reserved ad layout space, and absence of common ad provider requests. A real contact channel remains external setup work until an email address is configured.
+Verification on 2026-09-18: lint, strict TypeScript, unit tests, production build, dependency audit with no known vulnerabilities, the Phase 7 Chromium browser suite, and the complete 36-test Chromium browser suite passed. The production build generated 30 static pages after adding `/contact`. Browser checks verified About, Privacy, Terms, Contact, footer links, sitemap inclusion, disabled ad regions, reserved ad layout space, and absence of common ad provider requests. Live production verification later confirmed the current Vercel URL serves a real contact mailto link.
 
 ## Phase 8 — analytics and operations: Vercel observability connected, dashboard setup pending
 
