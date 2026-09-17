@@ -2,7 +2,9 @@ import type { Tool } from "@formatbase/tool-registry";
 
 export function siteOrigin(): string {
   const configured = process.env.NEXT_PUBLIC_SITE_URL;
-  return (configured || "http://localhost:3000").replace(/\/$/, "");
+  const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+  const fallback = vercelUrl ? `https://${vercelUrl}` : "http://localhost:3000";
+  return (configured || fallback).replace(/\/$/, "");
 }
 
 export function toolMetadata(tool: Tool) {

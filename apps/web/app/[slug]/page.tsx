@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTool, tools } from "@formatbase/tool-registry";
 import { toolMetadata, toolSchemas } from "@formatbase/seo";
+import { RelatedTools } from "@/components/related-tools";
 import { ToolShell } from "@/components/tool-shell";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -25,7 +26,7 @@ export default async function ToolPage({ params }: Props) {
       <div className="eyebrow"><span className="live-dot" /> {tool.eyebrow}</div>
       <h1>{tool.name}<span className="title-accent">.</span></h1>
       <p>{tool.description}</p>
-      <div className="trust-line"><span>◈ 100% browser based</span><span>◇ No sign up</span><span>↗ No data sent</span></div>
+      <div className="trust-line"><span>100% browser based</span><span>No sign up</span><span>No data sent</span></div>
     </section>
     <ToolShell tool={tool} />
     <div className="container ad-reserve" aria-hidden="true" data-ads-enabled="false" />
@@ -40,7 +41,7 @@ export default async function ToolPage({ params }: Props) {
         <h3>Frequently asked questions</h3>
         <div className="faq-list">{tool.faq.map(item => <details key={item.question}><summary>{item.question}</summary><p>{item.answer}</p></details>)}</div>
       </div>
-      {related.length > 0 && <aside className="related"><div className="eyebrow">KEEP WORKING</div><h3>Related tools</h3>{related.map(item => <Link href={`/${item.slug}`} key={item.id}>{item.name}<span>↗</span></Link>)}<div className="related-note">Built for developers who care about their data.</div></aside>}
+      {related.length > 0 && <RelatedTools current={tool.id} related={related} />}
     </section>
   </main>;
 }

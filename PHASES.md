@@ -80,25 +80,39 @@ Verification on 2026-09-18: frozen-lockfile install, lint, strict TypeScript, un
 - [x] Added FAQPage structured data alongside WebApplication and BreadcrumbList JSON-LD.
 - [x] Added registry tests that enforce unique SEO titles, descriptions, examples, common-error sections, FAQ sections, required page content, and related links.
 - [x] Added browser tests for all tool metadata, canonical URLs, H1s, examples, common errors, FAQs, related links, JSON-LD, sitemap, robots, category navigation, and a tool-page script budget.
-- [ ] Configure Search Console and Bing Webmaster after a production origin and verification method are available.
+- [x] Added environment-driven Google Search Console and Bing Webmaster verification meta tags.
+- [ ] Add the Search Console and Bing Webmaster verification tokens in Vercel after the properties are created.
 
-Verification on 2026-09-18: lint, strict TypeScript, unit tests, production build, the Phase 6 Chromium browser suite, and the complete 34-test Chromium browser suite passed. The production build generated 29 static pages, including 15 tool routes and six category routes. The sitemap includes every tool and category route, robots.txt allows indexing and points to the sitemap, canonical links resolve to each route, and the tested tool-page script transfer stayed below the 1.2 MB Phase 6 browser budget. Search Console and Bing Webmaster remain external setup work because they require the real production origin and account verification.
+Verification on 2026-09-18: lint, strict TypeScript, unit tests, production build, the Phase 6 Chromium browser suite, and the complete 34-test Chromium browser suite passed. The production build generated 29 static pages, including 15 tool routes and six category routes. The sitemap includes every tool and category route, robots.txt allows indexing and points to the sitemap, canonical links resolve to each route, and the tested tool-page script transfer stayed below the 1.2 MB Phase 6 browser budget. The current production origin is `https://tools-web-ten-ruddy.vercel.app`; Search Console and Bing Webmaster remain account-dashboard work until verification tokens are created and added to Vercel.
 
 ## Phase 7 — legal, trust, and monetization readiness: local readiness verified, production contact pending
 
 - [x] Expanded About, Privacy, and Terms pages with launch-ready trust, privacy, local-processing, preference-storage, accuracy, and availability copy.
 - [x] Added a Contact page and footer link. The page is ready for a real address through `NEXT_PUBLIC_CONTACT_EMAIL`.
 - [x] Recorded candidate domain `formatvalidateconvert.com` in site config for the pending contact/domain setup.
-- [x] Confirmed the current deployment has no analytics cookies, advertising cookies, account system, third-party analytics script, or ad provider script, so no consent banner is present at this stage.
+- [x] Confirmed the current deployment has no advertising cookies, account system, or ad provider script, so no ad-consent banner is present at this stage.
 - [x] Added disabled ad-reservation regions below the interactive tool workspace, with reserved layout space and no provider script loading.
 - [ ] Configure a real production contact email after the domain is purchased and mail is configured.
 
-Verification on 2026-09-18: lint, strict TypeScript, unit tests, production build, dependency audit with no known vulnerabilities, the Phase 7 Chromium browser suite, and the complete 36-test Chromium browser suite passed. The production build generated 30 static pages after adding `/contact`. Browser checks verified About, Privacy, Terms, Contact, footer links, sitemap inclusion, disabled ad regions, reserved ad layout space, and absence of common ad and analytics provider requests. A real contact channel remains external setup work because the domain has not been purchased yet.
+Verification on 2026-09-18: lint, strict TypeScript, unit tests, production build, dependency audit with no known vulnerabilities, the Phase 7 Chromium browser suite, and the complete 36-test Chromium browser suite passed. The production build generated 30 static pages after adding `/contact`. Browser checks verified About, Privacy, Terms, Contact, footer links, sitemap inclusion, disabled ad regions, reserved ad layout space, and absence of common ad provider requests. A real contact channel remains external setup work until an email address is configured.
 
-## Phase 8 — analytics and operations
+## Phase 8 — analytics and operations: Vercel observability connected, dashboard setup pending
 
-- [ ] Choose and connect a privacy-conscious provider without input/output capture.
-- [ ] Measure successful executions, starts, errors, related-tool use, repeat visits, organic search metrics, Core Web Vitals, and later revenue.
-- [ ] Establish dependency review, security/fixture/performance gates, preview deployment, smoke tests, and production monitoring.
+- [x] Chose and connected Vercel Web Analytics and Vercel Speed Insights for the current Vercel deployment.
+- [x] Connected privacy-safe custom events for tool starts, tool executions, tool errors, and related-tool clicks; event payloads exclude input, output, files, excerpts, and diagnostics text.
+- [x] Added URL redaction for analytics and performance events so query strings and fragments are removed before events are sent.
+- [x] Added Core Web Vitals collection through Vercel Speed Insights.
+- [x] Established dependency review, security, fixture, performance, production build, and browser gates in CI and local verification.
+- [x] Added Phase 8 browser checks for analytics initialization, input privacy, and related-tool navigation.
+- [ ] Enable Web Analytics and Speed Insights in the Vercel dashboard after redeploy, then review production data.
+- [ ] Add Search Console/Bing properties and connect organic search metrics after verification.
+- [ ] Add revenue monitoring only after ad provider readiness is reviewed.
+
+Verification on 2026-09-18: lint, strict TypeScript, package tests, production build, frozen-lockfile install,
+dependency audit with no known vulnerabilities, the Phase 8 Chromium browser suite, and the complete 38-test Chromium
+browser suite passed. The production build generated 30 static pages. Browser checks verified that Vercel Analytics and
+Speed Insights initialize, private tool input does not appear in outgoing requests, related-tool clicks remain
+navigable, and the homepage initial script transfer stayed at 275,315 bytes against the 500,000-byte budget. During the
+final audit, option persistence was tightened so an option change is written immediately before a fast reload.
 
 Future premium accounts, API service, Postgres, Redis, OPFS large-file mode, additional utilities, and ads remain outside the initial launch scope unless a later phase explicitly calls for them.

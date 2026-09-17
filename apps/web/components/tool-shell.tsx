@@ -67,12 +67,16 @@ export function ToolShell({ tool }: { tool: Tool }) {
     const requestId = String(++requestRef.current);
     setCopied(false);
     if (!source.trim()) { setOutput(""); setDiagnostics([]); setStatus("idle"); setMetrics(null); return; }
-    if (encoder.encode(source).length > MAX_EDITOR_INPUT_BYTES) {
+    const inputBytes = encoder.encode(source).length;
+    const inputSize = inputSizeBucket(inputBytes);
+    if (inputBytes > MAX_EDITOR_INPUT_BYTES) {
       setOutput(""); setStatus("error"); setMetrics(null);
       setDiagnostics([{ severity: "error", code: "INPUT_TOO_LARGE", message: "This editor currently supports files up to 3 MB. Try a smaller file." }]);
+      track({ name: "tool_error", tool: tool.id, action: tool.action, code: "input_too_large", inputSize });
       return;
     }
     setStatus("working");
+    track({ name: "tool_start", tool: tool.id, action: tool.action, inputSize });
     const worker = new Worker(new URL("../workers/tool.worker.ts", import.meta.url));
     workerRef.current = worker;
     timeoutRef.current = window.setTimeout(() => {
@@ -80,6 +84,7 @@ export function ToolShell({ tool }: { tool: Tool }) {
       stopWorker();
       setStatus("error");
       setDiagnostics([{ severity: "error", code: "PROCESSING_TIMEOUT", message: "Processing took too long. Try a smaller input." }]);
+      track({ name: "tool_error", tool: tool.id, action: tool.action, code: "processing_timeout", inputSize });
     }, MAX_PROCESSING_MS);
     worker.onmessage = (event: MessageEvent<WorkerResponse>) => {
       if (event.data.requestId !== String(requestRef.current)) return;
@@ -93,6 +98,7 @@ export function ToolShell({ tool }: { tool: Tool }) {
       stopWorker();
       setStatus("error");
       setDiagnostics([{ severity: "error", code: "WORKER_ERROR", message: "The browser could not process this input." }]);
+      track({ name: "tool_error", tool: tool.id, action: tool.action, code: "worker_error", inputSize });
     };
     const request: WorkerRequest = { requestId, tool: tool.id, engine: tool.engine, action: tool.action, input: source, options };
     worker.postMessage(request);
@@ -135,6 +141,7 @@ export function ToolShell({ tool }: { tool: Tool }) {
   const updateOption = (id: string, value: string | number | boolean) => {
     ++requestRef.current; stopWorker(); stopAutoTimer(); setOutput(""); setMetrics(null); setDiagnostics([]);
     setStatus(!input.trim() ? "idle" : encoder.encode(input).length > AUTO_LIMIT_BYTES ? "guarded" : "working");
+    localStorage.setItem(`formatbase.option.${tool.id}.${id}`, String(value));
     setOptions(current => ({ ...current, [id]: value }));
   };
   const copy = async () => {

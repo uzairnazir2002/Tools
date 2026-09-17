@@ -10,7 +10,7 @@ test("trust pages, contact, and footer links are launch ready", async ({ page, r
 
   await page.goto("/privacy");
   await expect(page.getByText("Tool input and output stay in the browser session.")).toBeVisible();
-  await expect(page.getByText("The current site does not use cookies for analytics or advertising")).toBeVisible();
+  await expect(page.getByText("Formatbase uses Vercel Web Analytics and Vercel Speed Insights")).toBeVisible();
 
   await page.goto("/contact");
   await expect(page).toHaveTitle("Contact | Formatbase");
@@ -21,12 +21,12 @@ test("trust pages, contact, and footer links are launch ready", async ({ page, r
   expect(await sitemap.text()).toContain("/contact");
 });
 
-test("ad regions are reserved but disabled and no provider scripts load", async ({ page }) => {
+test("ad regions are reserved but disabled and no ad provider scripts load", async ({ page }) => {
   const requested: string[] = [];
   page.on("request", request => requested.push(request.url()));
   await page.goto("/json-formatter");
   const slot = page.locator(".ad-reserve");
   await expect(slot).toHaveAttribute("data-ads-enabled", "false");
   expect(await slot.evaluate(element => (element as HTMLElement).offsetHeight)).toBeGreaterThanOrEqual(90);
-  expect(requested.some(url => /googlesyndication|doubleclick|google-analytics|googletagmanager|plausible|fathom/i.test(url))).toBe(false);
+  expect(requested.some(url => /googlesyndication|doubleclick|googleadservices|googletagmanager|google-analytics|adsystem/i.test(url))).toBe(false);
 });
