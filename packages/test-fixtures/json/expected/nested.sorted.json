@@ -1,0 +1,15 @@
+{
+  "outer": {
+    "empty": {},
+    "items": [
+      {
+        "enabled": false,
+        "id": 2
+      },
+      {
+        "enabled": true,
+        "id": 1
+      }
+    ]
+  }
+}

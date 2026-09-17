@@ -1,0 +1,12 @@
+{
+  "name": "@formatbase/xml-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "dependencies": {
+    "@formatbase/tool-core": "workspace:*",
+    "fast-xml-parser": "5.11.1"
+  },
+  "scripts": { "test": "node --experimental-strip-types --test test/*.test.mjs" }
+}

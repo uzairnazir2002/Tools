@@ -1,0 +1,20 @@
+{
+  "name": "@formatbase/editor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/code-editor.tsx" },
+  "devDependencies": { "@types/react": "^19.2.0" },
+  "dependencies": {
+    "@formatbase/tool-core": "workspace:*",
+    "@codemirror/lang-json": "^6.0.2",
+    "@codemirror/lang-sql": "^6.0.0",
+    "@codemirror/lang-yaml": "^6.0.0",
+    "@codemirror/lang-xml": "^6.0.0",
+    "@codemirror/lint": "^6.8.5",
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/view": "^6.38.0",
+    "codemirror": "^6.0.2",
+    "react": "^19.2.0"
+  }
+}

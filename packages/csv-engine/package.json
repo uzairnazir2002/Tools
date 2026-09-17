@@ -1,0 +1,13 @@
+{
+  "name": "@formatbase/csv-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "dependencies": {
+    "@formatbase/tool-core": "workspace:*",
+    "papaparse": "5.7.0"
+  },
+  "devDependencies": { "@types/papaparse": "^5.3.16" },
+  "scripts": { "test": "node --experimental-strip-types --test test/*.test.mjs" }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "@formatbase/tool-registry",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "test": "node --experimental-strip-types --test test/*.test.mjs" },
+  "dependencies": { "@formatbase/tool-core": "workspace:*" }
+}

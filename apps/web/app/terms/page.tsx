@@ -1,0 +1,7 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Terms | Formatbase", description: "Terms for using Formatbase developer tools." };
+
+export default function Page() {
+  return <main className="simple-page container"><div className="eyebrow">TERMS</div><h1>Terms of use<span className="title-accent">.</span></h1><p>Formatbase provides browser based developer utilities for formatting, validating, minifying, sorting, and converting structured data. You are responsible for reviewing results before using them in production systems.</p><h2>Use of the tools</h2><p>You may use the tools for ordinary development, debugging, documentation, and data preparation work. Do not use Formatbase to interfere with the service, overload the site, reverse engineer abuse protections, or attempt to process data in a way that harms other users.</p><h2>Accuracy</h2><p>Formatbase aims to preserve data carefully and show warnings when formats do not map cleanly. The tools cannot guarantee that a query is semantically valid, that converted data fits every downstream application, or that generated output is suitable for a specific production use.</p><h2>Availability</h2><p>The service is provided as is and may change, pause, or stop without notice. We do not promise uninterrupted availability or fitness for a particular purpose.</p><h2>Contact</h2><p>Use the Contact page for terms, privacy, or operational questions once a contact address is configured for the production domain.</p></main>;
+}

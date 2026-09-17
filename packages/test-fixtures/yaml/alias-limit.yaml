@@ -1,0 +1,2 @@
+base: &base [1]
+refs: [*base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base, *base]

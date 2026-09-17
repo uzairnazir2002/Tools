@@ -1,0 +1,25 @@
+:root {
+  color-scheme: light;
+  --bg: #f5f6f1;
+  --surface: #ffffff;
+  --surface-subtle: #f7f8f3;
+  --ink: #15332d;
+  --muted: #64766d;
+  --line: #dce4d9;
+  --green: #285f49;
+  --lime: #c8ef88;
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-display: Arial, Helvetica, sans-serif;
+  --font-mono: Consolas, 'Courier New', monospace;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #101d18;
+  --surface: #182a22;
+  --surface-subtle: #1b3027;
+  --ink: #e7f2e7;
+  --muted: #a6bbaa;
+  --line: #355044;
+  --green: #7fc295;
+  --lime: #b8e384;
+}

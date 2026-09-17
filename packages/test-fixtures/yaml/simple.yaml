@@ -1,0 +1,4 @@
+service:
+  name: api
+  ports: [8080, 8081]
+  enabled: true
