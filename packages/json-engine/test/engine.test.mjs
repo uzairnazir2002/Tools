@@ -10,6 +10,11 @@ test("preserves large integers and decimals", () => {
   assert.match(result.output, /9123372036854000123/);
   assert.match(result.output, /0\.12345678901234567890123456789/);
 });
+test("exact large integer token survives format and minify paths", () => {
+  const input = '{"id":9123372036854000123}';
+  assert.match(runJson(input, "format", options).output, /9123372036854000123/);
+  assert.equal(runJson(input, "minify", options).output, '{"id":9123372036854000123}');
+});
 test("preserves and reports duplicate keys", () => {
   const result = runJson('{"a":1,"a":2}', "format", options);
   assert.equal(result.output.match(/"a"/g).length, 2);

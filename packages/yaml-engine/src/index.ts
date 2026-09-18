@@ -1,5 +1,5 @@
 import { COLLECTION_STYLE_BLOCK, CORE_SCHEMA, eventsToAst, loadAll, mergeTag, parseEvents, present, visit, YAMLException } from "js-yaml";
-import type { Diagnostic, ToolOptions } from "@formatbase/tool-core";
+import type { Diagnostic, ToolOptions } from "@codeformattools/tool-core";
 
 export const YAML_LIMITS = { depth: 64, aliases: 32, totalMergeKeys: 2_000, nodes: 100_000, documents: 20, lineCharacters: 1_000_000, outputCharacters: 12_000_000 } as const;
 type Result = { ok: boolean; output: string; diagnostics: Diagnostic[] };
@@ -48,12 +48,20 @@ export function runYaml(input: string, action: string, options: ToolOptions = {}
     if (documents.length > YAML_LIMITS.documents) return { ok: false, output: "", diagnostics: [{ severity: "error", code: "YAML_DOCUMENT_LIMIT", message: `YAML streams are limited to ${YAML_LIMITS.documents} documents.` }] };
     guardNodes(documents);
     if (action === "validate") return { ok: true, output: "", diagnostics: [] };
+    if (input.includes("#")) return {
+      ok: false,
+      output: "",
+      diagnostics: [{
+        severity: "warning",
+        code: "YAML_COMMENT_PRESERVATION_LIMIT",
+        message: "YAML comments are not reformatted yet because preserving operational comments safely is required. Validation remains available, and comment-free YAML can still be formatted."
+      }]
+    };
     const indentation = options.indentation === 4 ? 4 : 2;
     const syntax = eventsToAst(parseEvents(input, { maxDepth: YAML_LIMITS.depth }), { source: input, schema });
     visit(syntax, node => { if (node.kind === "mapping" || node.kind === "sequence") node.style = COLLECTION_STYLE_BLOCK; });
     const output = present(syntax, { schema, indent: indentation, lineWidth: -1 }).trimEnd();
     if (output.length > YAML_LIMITS.outputCharacters) return { ok: false, output: "", diagnostics: [{ severity: "error", code: "YAML_OUTPUT_LIMIT", message: "Formatted YAML would exceed the output safety limit." }] };
-    const diagnostics: Diagnostic[] = input.includes("#") ? [{ severity: "warning", code: "YAML_COMMENTS_REMOVED", message: "Comments may be removed by formatting. Review the output before replacing the source." }] : [];
-    return { ok: true, output, diagnostics };
+    return { ok: true, output, diagnostics: [] };
   } catch (error) { return failure(error); }
 }

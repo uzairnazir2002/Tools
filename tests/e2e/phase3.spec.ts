@@ -3,12 +3,21 @@ import { test, expect } from "@playwright/test";
 test("YAML formatter handles anchors, comments, and indentation", async ({ page }) => {
   await page.goto("/yaml-formatter");
   await expect(page).toHaveTitle(/YAML Formatter/);
+  await expect(page.getByLabel("Indent").locator("option", { hasText: "Tab" })).toHaveCount(0);
   await page.getByLabel("Indent").selectOption("4");
-  await page.locator(".editor-pane").first().locator(".cm-content").fill("base: &base {a: 1}\ncopy: *base # note\n");
+  await page.locator(".editor-pane").first().locator(".cm-content").fill("base: &base {a: 1}\ncopy: *base\n");
   await expect(page.locator(".output-pane .cm-content")).toContainText("&base");
   await expect(page.locator(".output-pane .cm-content")).toContainText("*base");
   await expect(page.locator(".output-pane .cm-line").nth(1)).toHaveText("    a: 1");
-  await expect(page.locator(".diagnostic.warning")).toContainText(/Comments may be removed/);
+  await page.getByLabel("Indent").selectOption("2");
+  await expect(page.locator(".output-pane .cm-line").nth(1)).toHaveText("  a: 1");
+});
+
+test("YAML formatter does not destructively remove comments", async ({ page }) => {
+  await page.goto("/yaml-formatter");
+  await page.locator(".editor-pane").first().locator(".cm-content").fill("# application config\nserver:\n  # production host\n  host: example.com\n");
+  await expect(page.locator(".diagnostic.warning")).toContainText(/comments are not reformatted/i);
+  await expect(page.locator(".output-pane .cm-content")).toBeEmpty();
 });
 
 test("YAML validator reports syntax and rejects recursive aliases", async ({ page }) => {

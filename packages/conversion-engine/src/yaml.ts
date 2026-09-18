@@ -1,6 +1,6 @@
 import { COLLECTION_STYLE_BLOCK, CORE_SCHEMA, SCALAR_STYLE_DOUBLE_QUOTED, SCALAR_STYLE_PLAIN, eventsToAst, load, mergeTag, parseEvents, present, type Document, type Node } from "js-yaml";
-import { runYaml, YAML_LIMITS } from "@formatbase/yaml-engine";
-import type { Diagnostic } from "@formatbase/tool-core";
+import { runYaml, YAML_LIMITS } from "@codeformattools/yaml-engine";
+import type { Diagnostic } from "@codeformattools/tool-core";
 import { fromJs, type Value } from "./canonical.ts";
 
 const schema = CORE_SCHEMA.withTags(mergeTag);

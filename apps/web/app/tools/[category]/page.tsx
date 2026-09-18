@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { categories, getCategory, getCategoryTools } from "@formatbase/tool-registry";
+import { categories, getCategory, getCategoryTools } from "@codeformattools/tool-registry";
 
 type Props = { params: Promise<{ category: string }> };
 export function generateStaticParams() { return categories.map(category => ({ category: category.id })); }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const category = getCategory((await params).category);
   if (!category) return {};
-  return { title: `${category.name} | Formatbase`, description: category.description, alternates: { canonical: `/tools/${category.id}` } };
+  return { title: `${category.name} | Code Format Tools`, description: category.description, alternates: { canonical: `/tools/${category.id}` } };
 }
 export default async function CategoryPage({ params }: Props) {
   const category = getCategory((await params).category);

@@ -1,5 +1,5 @@
 "use client";
-import type { Diagnostic } from "@formatbase/tool-core";
+import type { Diagnostic } from "@codeformattools/tool-core";
 
 function excerpt(source: string, offset: number) {
   const lineStart = source.lastIndexOf("\n", Math.max(0, offset - 1)) + 1;

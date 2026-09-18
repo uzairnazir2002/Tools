@@ -1,0 +1,6 @@
+# shared defaults
+base: &base
+  retries: 3
+service:
+  <<: *base # merge defaults
+  name: api

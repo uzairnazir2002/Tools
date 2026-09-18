@@ -1,18 +1,18 @@
 {
-  "name": "@formatbase/worker-runtime",
+  "name": "@codeformattools/worker-runtime",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "exports": { ".": "./src/index.ts" },
   "dependencies": {
-    "@formatbase/tool-core": "workspace:*",
-    "@formatbase/tool-registry": "workspace:*",
-    "@formatbase/json-engine": "workspace:*",
-    "@formatbase/sql-engine": "workspace:*",
-    "@formatbase/yaml-engine": "workspace:*",
-    "@formatbase/xml-engine": "workspace:*",
-    "@formatbase/csv-engine": "workspace:*",
-    "@formatbase/conversion-engine": "workspace:*"
+    "@codeformattools/tool-core": "workspace:*",
+    "@codeformattools/tool-registry": "workspace:*",
+    "@codeformattools/json-engine": "workspace:*",
+    "@codeformattools/sql-engine": "workspace:*",
+    "@codeformattools/yaml-engine": "workspace:*",
+    "@codeformattools/xml-engine": "workspace:*",
+    "@codeformattools/csv-engine": "workspace:*",
+    "@codeformattools/conversion-engine": "workspace:*"
   },
   "scripts": { "test": "node --experimental-strip-types --test test/*.test.mjs" }
 }

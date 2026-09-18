@@ -17,8 +17,11 @@ test("CSV rejects duplicate and uneven headers and malformed quotes", () => {
 });
 
 test("formula-like cells are escaped but negative numbers stay intact", () => {
-  const result = writeCsv(["value"], [["=2+2"], ["-1"]]);
+  const result = writeCsv(["value"], [["=2+2"], ["+cmd"], ["@user"], ["-SUM(A1:A2)"], ["-1"]]);
   assert.match(result.output, /'=2\+2/);
+  assert.match(result.output, /'\+cmd/);
+  assert.match(result.output, /'@user/);
+  assert.match(result.output, /'-SUM/);
   assert.match(result.output, /\n-1$/);
   assert.equal(result.diagnostics[0].code, "CSV_FORMULA_ESCAPED");
 });

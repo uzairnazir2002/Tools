@@ -1,4 +1,4 @@
-import type { Action, ToolId } from "@formatbase/tool-core";
+import type { Action, ToolId } from "@codeformattools/tool-core";
 
 export type ToolExecutionEvent = {
   name: "tool_execution";

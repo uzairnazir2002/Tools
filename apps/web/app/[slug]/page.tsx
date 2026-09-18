@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getTool, tools } from "@formatbase/tool-registry";
-import { toolMetadata, toolSchemas } from "@formatbase/seo";
+import { getTool, tools } from "@codeformattools/tool-registry";
+import { toolMetadata, toolSchemas } from "@codeformattools/seo";
+import { AdSlotPlaceholder } from "@/components/ad-slot-placeholder";
 import { RelatedTools } from "@/components/related-tools";
 import { ToolShell } from "@/components/tool-shell";
 
@@ -29,7 +30,7 @@ export default async function ToolPage({ params }: Props) {
       <div className="trust-line"><span>100% browser based</span><span>No sign up</span><span>No data sent</span></div>
     </section>
     <ToolShell tool={tool} />
-    <div className="container ad-reserve" aria-hidden="true" data-ads-enabled="false" />
+    <AdSlotPlaceholder placement="after-tool" enabled={false} />
     <section className={`content-section container${related.length ? "" : " single"}`}>
       <div className="content-main">
         <div className="eyebrow">THE DETAILS</div>

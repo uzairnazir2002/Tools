@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { categories, tools } from "@formatbase/tool-registry";
+import { categories, tools } from "@codeformattools/tool-registry";
 
 test("all tool pages expose unique SEO sections and structured data", async ({ page }) => {
   const titles = new Set<string>();
@@ -42,7 +42,7 @@ test("sitemap, robots, category navigation, and page budget are launch ready", a
 
   for (const category of categories) {
     await page.goto(`/tools/${category.id}`);
-    await expect(page).toHaveTitle(`${category.name} | Formatbase`);
+    await expect(page).toHaveTitle(`${category.name} | Code Format Tools`);
     await expect(page.locator("link[rel='canonical']")).toHaveAttribute("href", new RegExp(`/tools/${category.id}$`));
     for (const tool of tools.filter(item => item.category === category.id)) await expect(page.getByRole("link", { name: new RegExp(tool.name) })).toBeVisible();
   }

@@ -25,14 +25,22 @@ test("formatter obeys indentation and validator leaves input untouched", () => {
   assert.deepEqual(runYaml(input, "validate"), { ok: true, output: "", diagnostics: [] });
 });
 
-test("numeric text and anchor names survive formatting; comments warn", () => {
-  const source = "big: 9123372036854000123\nbase: &original [1, 2]\ncopy: *original # note\n";
+test("numeric text and anchor names survive formatting", () => {
+  const source = "big: 9123372036854000123\nbase: &original [1, 2]\ncopy: *original\n";
   const result = runYaml(source, "format");
   assert.equal(result.ok, true);
   assert.match(result.output, /9123372036854000123/);
   assert.match(result.output, /&original/);
   assert.match(result.output, /\*original/);
-  assert.equal(result.diagnostics[0].code, "YAML_COMMENTS_REMOVED");
+});
+
+test("formatter refuses to remove YAML comments silently", () => {
+  for (const name of ["simple-comments", "inline-comments", "anchors-and-comments", "multi-document-comments", "quoted-values-comments"]) {
+    const result = runYaml(fixture(name), "format");
+    assert.equal(result.ok, false, name);
+    assert.equal(result.output, "");
+    assert.equal(result.diagnostics[0].code, "YAML_COMMENT_PRESERVATION_LIMIT");
+  }
 });
 
 test("malformed YAML returns a source location", () => {

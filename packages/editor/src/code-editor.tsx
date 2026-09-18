@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { EditorView, basicSetup } from "codemirror";
 import { Compartment, EditorState } from "@codemirror/state";
 import { lintGutter, setDiagnostics, type Diagnostic as CmDiagnostic } from "@codemirror/lint";
-import type { Diagnostic, EditorLanguage } from "@formatbase/tool-core";
+import type { Diagnostic, EditorLanguage } from "@codeformattools/tool-core";
 
 type Props = { value: string; language: EditorLanguage; onChange?: (value: string) => void; readOnly?: boolean; diagnostics?: Diagnostic[]; label: string };
 async function languageExtension(language: EditorLanguage) {
@@ -35,6 +35,7 @@ export function CodeEditor({ value, language, onChange, readOnly = false, diagno
       ".cm-selectionBackground, &.cm-focused .cm-selectionBackground": { backgroundColor: "#5e8c6655" },
       ".cm-tooltip": { backgroundColor: "#18302d", color: "#e6efea", border: "1px solid #38534a" }
     }), EditorView.lineWrapping,
+    EditorView.contentAttributes.of({ "aria-label": label }),
     EditorView.updateListener.of(update => { if (update.docChanged) onChangeRef.current?.(update.state.doc.toString()); }),
     EditorState.readOnly.of(readOnly),
     EditorView.editable.of(!readOnly),
@@ -42,7 +43,7 @@ export function CodeEditor({ value, language, onChange, readOnly = false, diagno
     const editor = new EditorView({ state: EditorState.create({ doc: initialValue.current, extensions }), parent: host.current });
     view.current = editor;
     return () => { editor.destroy(); view.current = null; };
-  }, [readOnly]);
+  }, [label, readOnly]);
 
   useEffect(() => {
     let active = true;

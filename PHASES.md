@@ -83,18 +83,18 @@ Verification on 2026-09-18: frozen-lockfile install, lint, strict TypeScript, un
 - [x] Added environment-driven Google Search Console and Bing Webmaster verification meta tags.
 - [x] Add the Search Console and Bing Webmaster verification tokens in Vercel after the properties are created.
 
-Verification on 2026-09-18: lint, strict TypeScript, unit tests, production build, the Phase 6 Chromium browser suite, and the complete 34-test Chromium browser suite passed. The production build generated 29 static pages, including 15 tool routes and six category routes. The sitemap includes every tool and category route, robots.txt allows indexing and points to the sitemap, canonical links resolve to each route, and the tested tool-page script transfer stayed below the 1.2 MB Phase 6 browser budget. Production verification on 2026-09-19 confirmed the current Vercel origin `https://tools-web-ten-ruddy.vercel.app` serves the correct sitemap, robots.txt, Google verification meta tag, Bing verification meta tag, and all 15 tool pages. The same audit found and fixed a related-tools gap on the SQL Formatter page; registry tests now require related links for every public tool.
+Verification on 2026-09-18: lint, strict TypeScript, unit tests, production build, the Phase 6 Chromium browser suite, and the complete 34-test Chromium browser suite passed. The production build generated 29 static pages, including 15 tool routes and six category routes. The sitemap includes every tool and category route, robots.txt allows indexing and points to the sitemap, canonical links resolve to each route, and the tested tool-page script transfer stayed below the 1.2 MB Phase 6 browser budget. The hardening pass on 2026-09-19 moved canonical production identity to `https://codeformattertools.com` in source and added social metadata, icons, manifest, homepage WebSite and Organization schema, and browser checks for production security headers.
 
 ## Phase 7 — legal, trust, and monetization readiness: complete and verified
 
 - [x] Expanded About, Privacy, and Terms pages with launch-ready trust, privacy, local-processing, preference-storage, accuracy, and availability copy.
 - [x] Added a Contact page and footer link. The page is ready for a real address through `NEXT_PUBLIC_CONTACT_EMAIL`.
-- [x] Recorded candidate domain `formatvalidateconvert.com` in site config for the pending contact/domain setup.
+- [x] Centralized production brand and domain configuration for `https://codeformattertools.com`.
 - [x] Confirmed the current deployment has no advertising cookies, account system, or ad provider script, so no ad-consent banner is present at this stage.
 - [x] Added disabled ad-reservation regions below the interactive tool workspace, with reserved layout space and no provider script loading.
 - [x] Configure a real production contact email for the current Vercel production origin.
 
-Verification on 2026-09-18: lint, strict TypeScript, unit tests, production build, dependency audit with no known vulnerabilities, the Phase 7 Chromium browser suite, and the complete 36-test Chromium browser suite passed. The production build generated 30 static pages after adding `/contact`. Browser checks verified About, Privacy, Terms, Contact, footer links, sitemap inclusion, disabled ad regions, reserved ad layout space, and absence of common ad provider requests. Live production verification later confirmed the current Vercel URL serves a real contact mailto link.
+Verification on 2026-09-18: lint, strict TypeScript, unit tests, production build, dependency audit with no known vulnerabilities, the Phase 7 Chromium browser suite, and the complete 36-test Chromium browser suite passed. The production build generated 30 static pages after adding `/contact`. Browser checks verified About, Privacy, Terms, Contact, footer links, sitemap inclusion, disabled ad regions, reserved ad layout space, and absence of common ad provider requests. The hardening pass replaced the disabled reservation markup with a reusable ad placeholder component and kept provider scripts absent.
 
 ## Phase 8 — analytics and operations: complete and verified
 
@@ -114,9 +114,7 @@ browser suite passed. The production build generated 30 static pages. Browser ch
 Speed Insights initialize, private tool input does not appear in outgoing requests, related-tool clicks remain
 navigable, and the homepage initial script transfer stayed at 275,315 bytes against the 500,000-byte budget. During the
 final audit, option persistence was tightened so an option change is written immediately before a fast reload.
-Production verification on 2026-09-19 confirmed the current Vercel origin initializes Vercel Analytics and Speed
-Insights in a browser session, serves Google and Bing verification tags, has a real contact mailto link, and no longer
-serves stale localhost sitemap or robots entries.
+The hardening pass on 2026-09-19 confirmed source canonical URLs, sitemap, robots, metadata, and environment defaults now target `https://codeformattertools.com`.
 
 Plan audit on 2026-09-19: lint, strict TypeScript, package tests, production build, complete 38-test Chromium browser
 suite, frozen-lockfile install, and dependency audit passed after the SQL related-tools fix. The audit record is kept in

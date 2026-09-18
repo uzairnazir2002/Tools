@@ -1,6 +1,6 @@
 import { parse, type ValueNode } from "@humanwhocodes/momoa";
-import { runJson } from "@formatbase/json-engine";
-import type { Diagnostic } from "@formatbase/tool-core";
+import { runJson } from "@codeformattools/json-engine";
+import type { Diagnostic } from "@codeformattools/tool-core";
 
 export type Value =
   | { kind: "null" }

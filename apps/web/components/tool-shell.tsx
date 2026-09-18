@@ -1,9 +1,11 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Tool } from "@formatbase/tool-registry";
-import { MAX_EDITOR_INPUT_BYTES, type Diagnostic, type ToolOptions, type WorkerRequest, type WorkerResponse } from "@formatbase/tool-core";
-import { inputSizeBucket, track } from "@formatbase/analytics";
-import { CodeEditor } from "@formatbase/editor";
+import type { Tool } from "@codeformattools/tool-registry";
+import { MAX_EDITOR_INPUT_BYTES, type Diagnostic, type ToolOptions, type WorkerRequest, type WorkerResponse } from "@codeformattools/tool-core";
+import { inputSizeBucket, track } from "@codeformattools/analytics";
+import { CodeEditor } from "@codeformattools/editor";
+import { migratedStorageValue, setStorageValue } from "@/lib/browser-storage";
+import { downloadMime } from "@/lib/download-mime";
 import { DiagnosticPanel } from "./diagnostic-panel";
 
 const AUTO_LIMIT_BYTES = 1 * 1024 * 1024;
@@ -31,12 +33,38 @@ export function ToolShell({ tool }: { tool: Tool }) {
   const requestRef = useRef(0);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const stopWorker = useCallback(() => {
-    workerRef.current?.terminate();
-    workerRef.current = null;
+  const clearProcessingTimeout = useCallback(() => {
     if (timeoutRef.current !== null) window.clearTimeout(timeoutRef.current);
     timeoutRef.current = null;
   }, []);
+  const stopWorker = useCallback(() => {
+    workerRef.current?.terminate();
+    workerRef.current = null;
+    clearProcessingTimeout();
+  }, [clearProcessingTimeout]);
+  const workerError = useCallback((inputSize?: ReturnType<typeof inputSizeBucket>) => {
+    stopWorker();
+    setStatus("error");
+    setDiagnostics([{ severity: "error", code: "WORKER_ERROR", message: "The browser worker could not process this input. Try again or use a smaller input." }]);
+    track({ name: "tool_error", tool: tool.id, action: tool.action, code: "worker_error", inputSize });
+  }, [stopWorker, tool]);
+  const getWorker = useCallback((inputSize?: ReturnType<typeof inputSizeBucket>) => {
+    if (workerRef.current) return workerRef.current;
+    const worker = new Worker(new URL("../workers/tool.worker.ts", import.meta.url));
+    worker.onmessage = (event: MessageEvent<WorkerResponse>) => {
+      if (event.data.requestId !== String(requestRef.current)) return;
+      clearProcessingTimeout();
+      setOutput(event.data.output); setDiagnostics(event.data.diagnostics); setMetrics(event.data.metrics);
+      setStatus(event.data.ok ? "success" : "error");
+      track({ name: "tool_execution", tool: tool.id, action: tool.action, success: event.data.ok, inputSize: inputSizeBucket(event.data.metrics.inputBytes), durationMs: event.data.metrics.durationMs });
+    };
+    worker.onerror = () => {
+      if (!workerRef.current) return;
+      workerError(inputSize);
+    };
+    workerRef.current = worker;
+    return worker;
+  }, [clearProcessingTimeout, tool, workerError]);
   const stopAutoTimer = useCallback(() => {
     if (autoTimerRef.current !== null) window.clearTimeout(autoTimerRef.current);
     autoTimerRef.current = null;
@@ -45,7 +73,7 @@ export function ToolShell({ tool }: { tool: Tool }) {
   useEffect(() => {
     const values = defaults(tool);
     for (const option of tool.options) {
-      const saved = localStorage.getItem(`formatbase.option.${tool.id}.${option.id}`);
+      const saved = migratedStorageValue(`option.${tool.id}.${option.id}`, value => Boolean(option.choices?.some(item => String(item.value) === value)) || (option.type === "checkbox" && (value === "true" || value === "false")));
       const choice = option.choices?.find(item => String(item.value) === saved);
       if (choice) values[option.id] = choice.value;
       if (option.type === "checkbox" && (saved === "true" || saved === "false")) values[option.id] = saved === "true";
@@ -57,13 +85,13 @@ export function ToolShell({ tool }: { tool: Tool }) {
   }, [tool]);
   useEffect(() => {
     if (!preferencesReady) return;
-    for (const option of tool.options) localStorage.setItem(`formatbase.option.${tool.id}.${option.id}`, String(options[option.id] ?? option.defaultValue));
+    for (const option of tool.options) setStorageValue(`option.${tool.id}.${option.id}`, String(options[option.id] ?? option.defaultValue));
   }, [options, preferencesReady, tool]);
   useEffect(() => () => { stopWorker(); stopAutoTimer(); }, [stopWorker, stopAutoTimer]);
 
   const processInput = useCallback((source: string) => {
     stopAutoTimer();
-    stopWorker();
+    clearProcessingTimeout();
     const requestId = String(++requestRef.current);
     setCopied(false);
     if (!source.trim()) { setOutput(""); setDiagnostics([]); setStatus("idle"); setMetrics(null); return; }
@@ -77,8 +105,7 @@ export function ToolShell({ tool }: { tool: Tool }) {
     }
     setStatus("working");
     track({ name: "tool_start", tool: tool.id, action: tool.action, inputSize });
-    const worker = new Worker(new URL("../workers/tool.worker.ts", import.meta.url));
-    workerRef.current = worker;
+    const worker = getWorker(inputSize);
     timeoutRef.current = window.setTimeout(() => {
       if (requestId !== String(requestRef.current)) return;
       stopWorker();
@@ -86,23 +113,10 @@ export function ToolShell({ tool }: { tool: Tool }) {
       setDiagnostics([{ severity: "error", code: "PROCESSING_TIMEOUT", message: "Processing took too long. Try a smaller input." }]);
       track({ name: "tool_error", tool: tool.id, action: tool.action, code: "processing_timeout", inputSize });
     }, MAX_PROCESSING_MS);
-    worker.onmessage = (event: MessageEvent<WorkerResponse>) => {
-      if (event.data.requestId !== String(requestRef.current)) return;
-      stopWorker();
-      setOutput(event.data.output); setDiagnostics(event.data.diagnostics); setMetrics(event.data.metrics);
-      setStatus(event.data.ok ? "success" : "error");
-      track({ name: "tool_execution", tool: tool.id, action: tool.action, success: event.data.ok, inputSize: inputSizeBucket(event.data.metrics.inputBytes), durationMs: event.data.metrics.durationMs });
-    };
-    worker.onerror = () => {
-      if (requestId !== String(requestRef.current)) return;
-      stopWorker();
-      setStatus("error");
-      setDiagnostics([{ severity: "error", code: "WORKER_ERROR", message: "The browser could not process this input." }]);
-      track({ name: "tool_error", tool: tool.id, action: tool.action, code: "worker_error", inputSize });
-    };
     const request: WorkerRequest = { requestId, tool: tool.id, engine: tool.engine, action: tool.action, input: source, options };
-    worker.postMessage(request);
-  }, [options, stopAutoTimer, stopWorker, tool]);
+    try { worker.postMessage(request); }
+    catch { workerError(inputSize); }
+  }, [clearProcessingTimeout, getWorker, options, stopAutoTimer, stopWorker, tool, workerError]);
 
   useEffect(() => {
     if (!input.trim() || !preferencesReady) return;
@@ -122,14 +136,14 @@ export function ToolShell({ tool }: { tool: Tool }) {
 
   const onInput = (text: string) => {
     ++requestRef.current;
-    stopWorker(); stopAutoTimer();
+    clearProcessingTimeout(); stopAutoTimer();
     setInput(text); setOutput(""); setMetrics(null); setDiagnostics([]);
     setStatus(!text.trim() ? "idle" : encoder.encode(text).length > AUTO_LIMIT_BYTES ? "guarded" : "working");
   };
   const onFile = async (file?: File) => {
     if (!file) return;
     const selectionId = ++requestRef.current;
-    stopWorker(); stopAutoTimer();
+    clearProcessingTimeout(); stopAutoTimer();
     if (file.size > MAX_EDITOR_INPUT_BYTES) {
       setOutput(""); setMetrics(null); setStatus("error");
       setDiagnostics([{ severity: "error", code: "INPUT_TOO_LARGE", message: "Choose a file smaller than 3 MB." }]);
@@ -139,9 +153,9 @@ export function ToolShell({ tool }: { tool: Tool }) {
     if (selectionId === requestRef.current) onInput(text);
   };
   const updateOption = (id: string, value: string | number | boolean) => {
-    ++requestRef.current; stopWorker(); stopAutoTimer(); setOutput(""); setMetrics(null); setDiagnostics([]);
+    ++requestRef.current; clearProcessingTimeout(); stopAutoTimer(); setOutput(""); setMetrics(null); setDiagnostics([]);
     setStatus(!input.trim() ? "idle" : encoder.encode(input).length > AUTO_LIMIT_BYTES ? "guarded" : "working");
-    localStorage.setItem(`formatbase.option.${tool.id}.${id}`, String(value));
+    setStorageValue(`option.${tool.id}.${id}`, String(value));
     setOptions(current => ({ ...current, [id]: value }));
   };
   const copy = async () => {
@@ -151,12 +165,12 @@ export function ToolShell({ tool }: { tool: Tool }) {
   };
   const download = () => {
     if (!output) return;
-    const url = URL.createObjectURL(new Blob([output], { type: "text/plain;charset=utf-8" }));
+    const url = URL.createObjectURL(new Blob([output], { type: downloadMime(tool.output.language) }));
     const anchor = document.createElement("a"); anchor.href = url; anchor.download = `${tool.slug}${tool.output.extension}`; anchor.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
   const reset = () => {
-    ++requestRef.current; stopWorker(); stopAutoTimer(); setInput(""); setOutput(""); setDiagnostics([]); setStatus("idle"); setMetrics(null);
+    ++requestRef.current; clearProcessingTimeout(); stopAutoTimer(); setInput(""); setOutput(""); setDiagnostics([]); setStatus("idle"); setMetrics(null);
     if (fileRef.current) fileRef.current.value = "";
   };
   const applyFix = (fix: NonNullable<Diagnostic["fix"]>) => onInput(`${input.slice(0, fix.startOffset)}${fix.replacement}${input.slice(fix.endOffset)}`);

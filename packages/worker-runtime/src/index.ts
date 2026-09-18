@@ -1,5 +1,5 @@
-import { MAX_EDITOR_INPUT_BYTES, type WorkerRequest, type WorkerResponse } from "@formatbase/tool-core";
-import { getToolById } from "@formatbase/tool-registry";
+import { MAX_EDITOR_INPUT_BYTES, type WorkerRequest, type WorkerResponse } from "@codeformattools/tool-core";
+import { getToolById } from "@codeformattools/tool-registry";
 
 type EngineResult = Pick<WorkerResponse, "ok" | "output" | "diagnostics">;
 const bytes = (value: string) => new TextEncoder().encode(value).length;
@@ -11,23 +11,23 @@ async function dispatch(request: WorkerRequest): Promise<EngineResult> {
   }
   switch (tool.engine) {
     case "json": {
-      const { runJson } = await import("@formatbase/json-engine");
+      const { runJson } = await import("@codeformattools/json-engine");
       return runJson(request.input, request.action, request.options);
     }
     case "sql": {
-      const { runSql } = await import("@formatbase/sql-engine");
+      const { runSql } = await import("@codeformattools/sql-engine");
       return runSql(request.input, request.options);
     }
     case "yaml": {
-      const { runYaml } = await import("@formatbase/yaml-engine");
+      const { runYaml } = await import("@codeformattools/yaml-engine");
       return runYaml(request.input, request.action, request.options);
     }
     case "xml": {
-      const { runXml } = await import("@formatbase/xml-engine");
+      const { runXml } = await import("@codeformattools/xml-engine");
       return runXml(request.input, request.action, request.options);
     }
     case "conversion": {
-      const { runConversion } = await import("@formatbase/conversion-engine");
+      const { runConversion } = await import("@codeformattools/conversion-engine");
       return runConversion(request.tool, request.input, request.options);
     }
     default:

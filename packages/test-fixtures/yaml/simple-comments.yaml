@@ -1,0 +1,4 @@
+# application config
+server:
+  # production host
+  host: example.com

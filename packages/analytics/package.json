@@ -1,8 +1,8 @@
 {
-  "name": "@formatbase/analytics",
+  "name": "@codeformattools/analytics",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "exports": { ".": "./src/index.ts" },
-  "dependencies": { "@formatbase/tool-core": "workspace:*" }
+  "dependencies": { "@codeformattools/tool-core": "workspace:*" }
 }

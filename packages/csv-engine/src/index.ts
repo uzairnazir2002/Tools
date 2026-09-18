@@ -1,5 +1,5 @@
 import Papa from "papaparse";
-import type { Diagnostic } from "@formatbase/tool-core";
+import type { Diagnostic } from "@codeformattools/tool-core";
 
 export type CsvTable = { headers: string[]; rows: string[][]; diagnostics: Diagnostic[] };
 export const CSV_LIMITS = { rows: 100_000, columns: 1_000, outputCharacters: 12_000_000 } as const;

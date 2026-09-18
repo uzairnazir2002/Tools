@@ -1,15 +1,16 @@
 {
-  "name": "@formatbase/conversion-engine",
+  "name": "@codeformattools/conversion-engine",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "exports": { ".": "./src/index.ts" },
   "dependencies": {
-    "@formatbase/tool-core": "workspace:*",
-    "@formatbase/json-engine": "workspace:*",
-    "@formatbase/yaml-engine": "workspace:*",
-    "@formatbase/xml-engine": "workspace:*",
-    "@formatbase/csv-engine": "workspace:*",
+    "@codeformattools/tool-core": "workspace:*",
+    "@codeformattools/seo": "workspace:*",
+    "@codeformattools/json-engine": "workspace:*",
+    "@codeformattools/yaml-engine": "workspace:*",
+    "@codeformattools/xml-engine": "workspace:*",
+    "@codeformattools/csv-engine": "workspace:*",
     "@humanwhocodes/momoa": "3.3.13",
     "js-yaml": "5.4.2",
     "fast-xml-parser": "5.11.1"

@@ -2,18 +2,16 @@
 
 Audit date: 2026-09-19
 
-Scope: this audit checks the pasted architecture and implementation plan against the repository and the current Vercel
-production origin, excluding only the items the owner explicitly left for later: purchasing/connecting
-`formatvalidateconvert.com`, switching `NEXT_PUBLIC_SITE_URL` to that custom domain after it is live, ads/revenue
-monitoring after provider review, and future premium/API/database/large-file features outside V1.
+Scope: this audit checks the pasted architecture and implementation plan against the repository after the production
+hardening pass for the final Code Format Tools brand and `https://codeformattertools.com`. It excludes only the items the
+owner explicitly left for later: purchasing/connecting the production domain in DNS/Vercel, ads/revenue monitoring
+after provider review, and future premium/API/database/large-file features outside V1.
 
 ## Result
 
-The V1 structured-data launch plan is implemented.
-
-The audit found one product gap: `sql-formatter` had no related tools, even though the SEO phase requires related links
-on every tool page. This was fixed by adding related links and removing the test exception that allowed SQL to skip
-related tools.
+The V1 structured-data launch plan is implemented in source. The hardening pass updates the public brand/domain,
+security headers, storage compatibility, YAML comment safety, worker lifecycle, download MIME types, ad placeholders,
+accessibility, icons, manifest, social metadata, homepage schema, docs, and browser coverage.
 
 ## Architecture coverage
 
@@ -77,11 +75,10 @@ Registry audit result:
 - Tool pages include server-rendered H1, description, breadcrumbs, documentation, examples, common errors, FAQ, related
   tools, canonical metadata, and structured data.
 - Sitemap and robots are generated from the site origin and registry.
-- Google Search Console and Bing Webmaster verification meta tags are environment driven and live on the current Vercel
-  origin.
+- Google Search Console and Bing Webmaster verification meta tags are environment driven.
 - About, Privacy, Terms, and Contact pages are present.
-- Contact page has a live production mailto link.
-- Disabled ad reservation regions exist with reserved height and no ad provider scripts.
+- Contact page supports a production mailto link through `NEXT_PUBLIC_CONTACT_EMAIL`.
+- Disabled ad placeholder regions exist with reserved height and no ad provider scripts.
 - Privacy copy discloses local processing, localStorage preferences, Vercel Analytics, and Vercel Speed Insights.
 
 ## Testing and operations coverage
@@ -92,13 +89,12 @@ Registry audit result:
 - Unit, fixture, generated/property, and browser e2e tests cover engines, safety fixtures, routing, UI flows, network
   privacy, SEO, legal/trust pages, analytics initialization, and performance budgets.
 - Homepage parser libraries stay out of the initial route budget; tool engines load through worker/runtime paths.
-- Current production verification confirms the Vercel origin serves the current code, correct sitemap/robots, Google and
-  Bing verification tags, contact mailto, privacy analytics disclosure, and browser-visible Vercel Analytics/Speed
-  Insights globals.
+- Current source verification targets `https://codeformattertools.com` as the canonical production origin. Live DNS/Vercel
+  verification remains a deployment task after the owner connects the domain.
 
 ## Explicitly deferred by owner
 
-- Buy and connect `formatvalidateconvert.com`.
-- Update `NEXT_PUBLIC_SITE_URL` to the custom domain after that domain is live and redeploy.
+- Buy and connect `codeformattertools.com` in DNS/Vercel.
+- Set production `NEXT_PUBLIC_SITE_URL=https://codeformattertools.com` during deployment.
 - Add ads/revenue monitoring only after ad provider readiness is reviewed.
 - Build future premium accounts, API service, Postgres, Redis, OPFS/streaming large-file mode, and additional utilities.

@@ -1,11 +1,11 @@
 {
-  "name": "@formatbase/sql-engine",
+  "name": "@codeformattools/sql-engine",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "exports": { ".": "./src/index.ts" },
   "dependencies": {
-    "@formatbase/tool-core": "workspace:*",
+    "@codeformattools/tool-core": "workspace:*",
     "sql-formatter": "15.8.2"
   },
   "scripts": { "test": "node --experimental-strip-types --test test/*.test.mjs" }

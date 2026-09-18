@@ -1,0 +1,3 @@
+server:
+  host: example.com # public host
+  port: 443 # tls

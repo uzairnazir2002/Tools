@@ -1,5 +1,5 @@
 import { format, type KeywordCase, type SqlLanguage } from "sql-formatter";
-import type { Diagnostic, ToolOptions } from "@formatbase/tool-core";
+import type { Diagnostic, ToolOptions } from "@codeformattools/tool-core";
 
 const dialects: SqlLanguage[] = ["sql", "postgresql", "mysql", "mariadb", "transactsql", "sqlite", "bigquery", "snowflake", "plsql", "redshift", "duckdb", "clickhouse"];
 type Result = { ok: boolean; output: string; diagnostics: Diagnostic[] };

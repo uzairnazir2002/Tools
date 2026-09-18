@@ -1,5 +1,5 @@
 import { parse, type DocumentNode, type ValueNode } from "@humanwhocodes/momoa";
-import type { Action, Diagnostic, ToolOptions } from "@formatbase/tool-core";
+import type { Action, Diagnostic, ToolOptions } from "@codeformattools/tool-core";
 
 type Result = { ok: boolean; output: string; diagnostics: Diagnostic[] };
 const MAX_DEPTH = 512;

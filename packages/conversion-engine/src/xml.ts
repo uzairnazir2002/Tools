@@ -1,6 +1,7 @@
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
-import { runXml } from "@formatbase/xml-engine";
-import type { Diagnostic } from "@formatbase/tool-core";
+import { runXml } from "@codeformattools/xml-engine";
+import { siteConfig } from "@codeformattools/seo";
+import type { Diagnostic } from "@codeformattools/tool-core";
 import { fromJs, type Value } from "./canonical.ts";
 
 type OrderedNode = Record<string, unknown>;
@@ -22,7 +23,7 @@ export function fromXml(input: string, mode: string): { value: Value; diagnostic
   const validation = runXml(input, "validate");
   if (!validation.ok) throw new Error("XML_PARSE_ERROR: " + validation.diagnostics[0]?.message);
   const ordered = new XMLParser(parserOptions).parse(input) as OrderedNode[];
-  if (mode === "lossless") return { value: fromJs({ $format: "formatbase.xml.v1", nodes: ordered }), diagnostics: [] };
+  if (mode === "lossless") return { value: fromJs({ $format: siteConfig.xmlEnvelopeFormat, nodes: ordered }), diagnostics: [] };
   const elements = ordered.filter(node => Object.keys(node).some(key => !key.startsWith("#") && key !== ":@"));
   if (elements.length !== 1) throw new Error("XML_ROOT_ERROR: Expected exactly one root element.");
   const convertElement = (node: OrderedNode): Value => {
@@ -52,7 +53,8 @@ export function fromXml(input: string, mode: string): { value: Value; diagnostic
 export function toXml(value: Value, mode: string): { output: string; diagnostics: Diagnostic[] } {
   if (mode === "lossless") {
     const payload = toJs(value) as { $format?: string; nodes?: unknown };
-    if (!payload || payload.$format !== "formatbase.xml.v1" || !Array.isArray(payload.nodes)) throw new Error("XML_ENVELOPE_REQUIRED: Lossless XML needs a Formatbase XML envelope with $format and nodes.");
+    const supportedEnvelope = payload?.$format === siteConfig.xmlEnvelopeFormat || payload?.$format === siteConfig.legacyXmlEnvelopeFormat;
+    if (!payload || !supportedEnvelope || !Array.isArray(payload.nodes)) throw new Error("XML_ENVELOPE_REQUIRED: Lossless XML needs a Code Format Tools XML envelope with $format and nodes.");
     const output = new XMLBuilder({ ...parserOptions, format: false }).build(payload.nodes).trim();
     const validity = runXml(output, "validate");
     if (!validity.ok) throw new Error("XML_OUTPUT_ERROR: " + validity.diagnostics[0]?.message);

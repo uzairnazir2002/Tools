@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f7f8f3"/>
+  <circle cx="950" cy="190" r="220" fill="#dbeccf"/>
+  <rect x="86" y="82" width="120" height="120" rx="28" fill="#245f49"/>
+  <path d="M130 125 105 142l25 17" fill="none" stroke="#d6f49f" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M162 125 187 142l-25 17" fill="none" stroke="#d6f49f" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M153 111 139 174" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+  <text x="86" y="305" fill="#183f31" font-family="Arial, sans-serif" font-size="78" font-weight="700">Code Format Tools</text>
+  <text x="90" y="380" fill="#4c6258" font-family="Arial, sans-serif" font-size="34">Private formatter, validator, and converter tools.</text>
+  <text x="90" y="455" fill="#2d7950" font-family="Arial, sans-serif" font-size="28">codeformattertools.com</text>
+</svg>

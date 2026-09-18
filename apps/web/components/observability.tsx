@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Analytics, type BeforeSendEvent } from "@vercel/analytics/next";
 import { track as vercelTrack } from "@vercel/analytics";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { setAnalyticsProvider, type AnalyticsEvent } from "@formatbase/analytics";
+import { setAnalyticsProvider, type AnalyticsEvent } from "@codeformattools/analytics";
 
 function cleanUrl(value: string): string {
   try {

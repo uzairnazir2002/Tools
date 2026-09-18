@@ -7,7 +7,7 @@ function sample(targetBytes) {
   return `[${Array(count).fill(item).join(",")}]`;
 }
 
-for (const target of [100_000, 1_000_000, 3_000_000, 5_000_000]) {
+for (const target of [1_000, 100_000, 1_000_000, 3_000_000, 5_000_000]) {
   const input = sample(target);
   const start = performance.now();
   const result = runJson(input, "format", { indentation: 2 });

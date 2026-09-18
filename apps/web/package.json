@@ -7,15 +7,15 @@
     "build": "next build",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "node --test"
+    "test": "node --experimental-strip-types --test"
   },
   "dependencies": {
-    "@formatbase/analytics": "workspace:*",
-    "@formatbase/editor": "workspace:*",
-    "@formatbase/seo": "workspace:*",
-    "@formatbase/tool-core": "workspace:*",
-    "@formatbase/tool-registry": "workspace:*",
-    "@formatbase/worker-runtime": "workspace:*",
+    "@codeformattools/analytics": "workspace:*",
+    "@codeformattools/editor": "workspace:*",
+    "@codeformattools/seo": "workspace:*",
+    "@codeformattools/tool-core": "workspace:*",
+    "@codeformattools/tool-registry": "workspace:*",
+    "@codeformattools/worker-runtime": "workspace:*",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "next": "16.3.3",

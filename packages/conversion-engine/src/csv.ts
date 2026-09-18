@@ -1,5 +1,5 @@
-import { parseCsv, writeCsv } from "@formatbase/csv-engine";
-import type { Diagnostic } from "@formatbase/tool-core";
+import { parseCsv, writeCsv } from "@codeformattools/csv-engine";
+import type { Diagnostic } from "@codeformattools/tool-core";
 import { toJson, type Value } from "./canonical.ts";
 
 const warning = (code: string, message: string): Diagnostic => ({ severity: "warning", code, message });

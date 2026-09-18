@@ -1,0 +1,3 @@
+message: "hello # not a comment"
+# real comment
+path: '/tmp/example'

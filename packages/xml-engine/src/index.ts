@@ -1,5 +1,5 @@
 import { XMLBuilder, XMLParser, XMLValidator } from "fast-xml-parser";
-import type { Diagnostic, ToolOptions } from "@formatbase/tool-core";
+import type { Diagnostic, ToolOptions } from "@codeformattools/tool-core";
 
 export const XML_LIMITS = { depth: 128, tags: 100_000, tagCharacters: 100_000, entities: 10_000, outputCharacters: 12_000_000 } as const;
 type Result = { ok: boolean; output: string; diagnostics: Diagnostic[] };

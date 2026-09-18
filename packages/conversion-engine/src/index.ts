@@ -1,4 +1,4 @@
-import type { Diagnostic, ToolOptions } from "@formatbase/tool-core";
+import type { Diagnostic, ToolOptions } from "@codeformattools/tool-core";
 import { duplicateKeys, fromJson, MAX_CONVERSION_OUTPUT, toJson, type Value } from "./canonical.ts";
 import { fromYaml, toYaml } from "./yaml.ts";
 import { fromCsv, toCsv } from "./csv.ts";

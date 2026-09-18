@@ -1,11 +1,11 @@
 {
-  "name": "@formatbase/csv-engine",
+  "name": "@codeformattools/csv-engine",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "exports": { ".": "./src/index.ts" },
   "dependencies": {
-    "@formatbase/tool-core": "workspace:*",
+    "@codeformattools/tool-core": "workspace:*",
     "papaparse": "5.7.0"
   },
   "devDependencies": { "@types/papaparse": "^5.3.16" },
