@@ -39,7 +39,7 @@ test("every tool has unique SEO content and complete page sections", () => {
     assert.ok(tool.howItWorks.length >= 3);
     assert.ok(tool.commonErrors.length >= 3);
     assert.ok(tool.faq.length >= 2);
-    assert.ok(tool.relatedTools.length > 0 || tool.id === "sql-formatter");
+    assert.ok(tool.relatedTools.length > 0);
   }
 });
 test("invalid registries report missing relations and duplicate ids", () => {

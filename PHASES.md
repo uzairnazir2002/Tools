@@ -74,16 +74,16 @@ Verification on 2026-09-18: frozen-lockfile install, lint, strict TypeScript, un
 
 Verification on 2026-09-18: frozen-lockfile install, lint, strict TypeScript, unit tests, production build, dependency audit with no known vulnerabilities, and the complete 32-test Chromium browser suite passed. Phase 5 added six converter pages for a total of 15 tool routes and six registry categories. CSV engine tests, conversion-engine tests, generated JSON/YAML round trips, golden outputs, worker runtime routing, file/download/mobile behavior, mode diagnostics, formula escaping, and request privacy were reviewed against the conversion and CSV sections of the brief before proceeding.
 
-## Phase 6 — launch SEO: in-repo SEO layer verified, external webmaster setup pending
+## Phase 6 — launch SEO: complete and verified
 
 - [x] Reviewed all 15 tool pages for unique titles, descriptions, examples, common errors, FAQs, related links, breadcrumbs, and structured data.
 - [x] Added FAQPage structured data alongside WebApplication and BreadcrumbList JSON-LD.
 - [x] Added registry tests that enforce unique SEO titles, descriptions, examples, common-error sections, FAQ sections, required page content, and related links.
 - [x] Added browser tests for all tool metadata, canonical URLs, H1s, examples, common errors, FAQs, related links, JSON-LD, sitemap, robots, category navigation, and a tool-page script budget.
 - [x] Added environment-driven Google Search Console and Bing Webmaster verification meta tags.
-- [ ] Add the Search Console and Bing Webmaster verification tokens in Vercel after the properties are created.
+- [x] Add the Search Console and Bing Webmaster verification tokens in Vercel after the properties are created.
 
-Verification on 2026-09-18: lint, strict TypeScript, unit tests, production build, the Phase 6 Chromium browser suite, and the complete 34-test Chromium browser suite passed. The production build generated 29 static pages, including 15 tool routes and six category routes. The sitemap includes every tool and category route, robots.txt allows indexing and points to the sitemap, canonical links resolve to each route, and the tested tool-page script transfer stayed below the 1.2 MB Phase 6 browser budget. The current production origin is `https://tools-web-ten-ruddy.vercel.app`; Search Console and Bing Webmaster remain account-dashboard work until verification tokens are created and added to Vercel.
+Verification on 2026-09-18: lint, strict TypeScript, unit tests, production build, the Phase 6 Chromium browser suite, and the complete 34-test Chromium browser suite passed. The production build generated 29 static pages, including 15 tool routes and six category routes. The sitemap includes every tool and category route, robots.txt allows indexing and points to the sitemap, canonical links resolve to each route, and the tested tool-page script transfer stayed below the 1.2 MB Phase 6 browser budget. Production verification on 2026-09-19 confirmed the current Vercel origin `https://tools-web-ten-ruddy.vercel.app` serves the correct sitemap, robots.txt, Google verification meta tag, Bing verification meta tag, and all 15 tool pages. The same audit found and fixed a related-tools gap on the SQL Formatter page; registry tests now require related links for every public tool.
 
 ## Phase 7 — legal, trust, and monetization readiness: complete and verified
 
@@ -96,7 +96,7 @@ Verification on 2026-09-18: lint, strict TypeScript, unit tests, production buil
 
 Verification on 2026-09-18: lint, strict TypeScript, unit tests, production build, dependency audit with no known vulnerabilities, the Phase 7 Chromium browser suite, and the complete 36-test Chromium browser suite passed. The production build generated 30 static pages after adding `/contact`. Browser checks verified About, Privacy, Terms, Contact, footer links, sitemap inclusion, disabled ad regions, reserved ad layout space, and absence of common ad provider requests. Live production verification later confirmed the current Vercel URL serves a real contact mailto link.
 
-## Phase 8 — analytics and operations: Vercel observability connected, dashboard setup pending
+## Phase 8 — analytics and operations: complete and verified
 
 - [x] Chose and connected Vercel Web Analytics and Vercel Speed Insights for the current Vercel deployment.
 - [x] Connected privacy-safe custom events for tool starts, tool executions, tool errors, and related-tool clicks; event payloads exclude input, output, files, excerpts, and diagnostics text.
@@ -104,8 +104,8 @@ Verification on 2026-09-18: lint, strict TypeScript, unit tests, production buil
 - [x] Added Core Web Vitals collection through Vercel Speed Insights.
 - [x] Established dependency review, security, fixture, performance, production build, and browser gates in CI and local verification.
 - [x] Added Phase 8 browser checks for analytics initialization, input privacy, and related-tool navigation.
-- [ ] Enable Web Analytics and Speed Insights in the Vercel dashboard after redeploy, then review production data.
-- [ ] Add Search Console/Bing properties and connect organic search metrics after verification.
+- [x] Enable Web Analytics and Speed Insights in the Vercel dashboard after redeploy, then review production data.
+- [x] Add Search Console/Bing properties and connect organic search metrics after verification.
 - [ ] Add revenue monitoring only after ad provider readiness is reviewed.
 
 Verification on 2026-09-18: lint, strict TypeScript, package tests, production build, frozen-lockfile install,
@@ -114,5 +114,12 @@ browser suite passed. The production build generated 30 static pages. Browser ch
 Speed Insights initialize, private tool input does not appear in outgoing requests, related-tool clicks remain
 navigable, and the homepage initial script transfer stayed at 275,315 bytes against the 500,000-byte budget. During the
 final audit, option persistence was tightened so an option change is written immediately before a fast reload.
+Production verification on 2026-09-19 confirmed the current Vercel origin initializes Vercel Analytics and Speed
+Insights in a browser session, serves Google and Bing verification tags, has a real contact mailto link, and no longer
+serves stale localhost sitemap or robots entries.
+
+Plan audit on 2026-09-19: lint, strict TypeScript, package tests, production build, complete 38-test Chromium browser
+suite, frozen-lockfile install, and dependency audit passed after the SQL related-tools fix. The audit record is kept in
+`PLAN_AUDIT.md`.
 
 Future premium accounts, API service, Postgres, Redis, OPFS large-file mode, additional utilities, and ads remain outside the initial launch scope unless a later phase explicitly calls for them.

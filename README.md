@@ -1,6 +1,6 @@
 # Formatbase
 
-Private browser based developer tools. This repository contains the completed Phase 0 foundation, Phase 1 JSON tools, Phase 2 SQL Formatter, Phase 3 YAML tools, Phase 4 XML tools, and Phase 5 CSV and conversion tools. See [PHASES.md](./PHASES.md) for the phase checklist and acceptance record.
+Private browser based developer tools. This repository contains the completed Phase 0 foundation, Phase 1 JSON tools, Phase 2 SQL Formatter, Phase 3 YAML tools, Phase 4 XML tools, Phase 5 CSV and conversion tools, Phase 6 launch SEO, Phase 7 legal/trust pages, and Phase 8 analytics/operations wiring. See [PHASES.md](./PHASES.md) for the phase checklist and acceptance record.
 
 ## Included
 
@@ -40,10 +40,10 @@ pnpm e2e
 ```
 
 Set `NEXT_PUBLIC_SITE_URL` to the production origin before deployment so canonical URLs and the sitemap point to the correct site. The current Vercel production origin is `https://tools-web-ten-ruddy.vercel.app`.
-Set `NEXT_PUBLIC_CONTACT_EMAIL` before launch so the Contact page shows a real support address. The candidate custom domain is `formatvalidateconvert.com`, but it is not treated as the production origin until it is purchased and configured.
-Set `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` and `NEXT_PUBLIC_BING_SITE_VERIFICATION` when Search Console and Bing Webmaster provide verification tokens.
+Set `NEXT_PUBLIC_CONTACT_EMAIL` so the Contact page shows a real support address. The current Vercel production deployment has a contact mailto link configured. The candidate custom domain is `formatvalidateconvert.com`, but it is not treated as the production origin until it is purchased and configured.
+Set `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` and `NEXT_PUBLIC_BING_SITE_VERIFICATION` when Search Console and Bing Webmaster provide verification tokens. The current Vercel production deployment has both verification tags configured.
 Browser tests use Playwright Chromium. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to a local Chrome/Chromium executable, or run `pnpm exec playwright install chromium`.
 
 ## Current limits
 
-The editor accepts input up to 3 MB. Inputs above 1 MB require an explicit run. This is a guarded limit, not a performance claim. SQL formatting checks parseable syntax but cannot verify database semantics or execute queries. YAML formatting retains numeric scalar text and anchors but removes comments; the validator leaves input untouched. XML formatting keeps mixed content and xml:space=preserve sources unchanged to protect text spacing. Conversion tools expose lossless, best effort, and compatibility modes where data models differ. CSV cells are kept as text in lossless mode, and formula-like output cells are escaped. Large file streaming belongs to a later phase of the brief. Vercel Web Analytics and Speed Insights are configured for page views, tool events, related-tool clicks, and Core Web Vitals without raw input or output capture. No account, database, input persistence, ad script, or configured production contact email is present.
+The editor accepts input up to 3 MB. Inputs above 1 MB require an explicit run. This is a guarded limit, not a performance claim. SQL formatting checks parseable syntax but cannot verify database semantics or execute queries. YAML formatting retains numeric scalar text and anchors but removes comments; the validator leaves input untouched. XML formatting keeps mixed content and xml:space=preserve sources unchanged to protect text spacing. Conversion tools expose lossless, best effort, and compatibility modes where data models differ. CSV cells are kept as text in lossless mode, and formula-like output cells are escaped. Large file streaming belongs to a later phase of the brief. Vercel Web Analytics and Speed Insights are configured for page views, tool events, related-tool clicks, and Core Web Vitals without raw input or output capture. No account, database, input persistence, or ad script is present.

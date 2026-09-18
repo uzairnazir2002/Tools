@@ -180,7 +180,7 @@ export const tools: Tool[] = [
       { question: "Which dialect should I choose?", answer: "Select the dialect of the database that will run the query. Vendor-specific syntax can produce errors under another dialect." },
       { question: "Does formatting prove the query is valid?", answer: "No. Formatting does not check tables, columns, permissions, or database semantics." }
     ],
-    relatedTools: [], example: "select u.id, u.email from users u where u.active = true order by u.id desc;"
+    relatedTools: ["json-formatter", "yaml-formatter", "xml-formatter"], example: "select u.id, u.email from users u where u.active = true order by u.id desc;"
   },
   yamlTool({
     id: "yaml-formatter", slug: "yaml-formatter", name: "YAML Formatter", eyebrow: "FORMAT CONFIG", action: "format",
