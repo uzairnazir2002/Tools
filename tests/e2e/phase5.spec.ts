@@ -24,7 +24,7 @@ test("XML converters expose best effort mapping and lossless envelope", async ({
   await page.locator(".editor-pane").first().locator(".cm-content").fill('<root><item id="1">Book</item></root>');
   await expect(page.locator(".output-pane .cm-content")).toContainText('"@id": "1"', { timeout: 15_000 });
   await page.getByLabel("Mode").selectOption("lossless");
-  await expect(page.locator(".output-pane .cm-content")).toContainText("codeformattools.xml.v1");
+  await expect(page.locator(".output-pane .cm-content")).toContainText("codeformattertools.xml.v1");
   await page.goto("/json-to-xml");
   await page.locator(".editor-pane").first().locator(".cm-content").fill('{"root":{"item":{"@id":"1","#text":"Book"}}}');
   await expect(page.locator(".output-pane .cm-content")).toContainText('<item id="1">Book</item>');

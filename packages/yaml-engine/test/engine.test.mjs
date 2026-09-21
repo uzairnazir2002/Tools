@@ -43,6 +43,19 @@ test("formatter refuses to remove YAML comments silently", () => {
   }
 });
 
+test("formatter allows hash characters that are scalar content", () => {
+  const source = [
+    'url: "https://example.com/#section"',
+    "plain: abc#def",
+    'quoted: "#not-a-comment"'
+  ].join("\n");
+  const result = runYaml(source, "format");
+  assert.equal(result.ok, true, result.diagnostics[0]?.message);
+  assert.match(result.output, /https:\/\/example\.com\/#section/);
+  assert.match(result.output, /plain: abc#def/);
+  assert.match(result.output, /quoted: '#not-a-comment'|quoted: "#not-a-comment"/);
+});
+
 test("malformed YAML returns a source location", () => {
   const result = runYaml(fixture("malformed"), "validate");
   assert.equal(result.ok, false);

@@ -23,23 +23,27 @@ test("CodeMirror editors expose accessible textbox names", async ({ page }) => {
   await expect(page.locator(".diagnostic.error")).toContainText(/JSON|Unexpected|Expected/i);
 });
 
-test("legacy browser preferences migrate to Code Format Tools storage keys", async ({ page }) => {
+test("legacy browser preferences migrate to CodeFormatterTools storage keys", async ({ page }) => {
   await page.goto("/");
-  await page.evaluate(() => localStorage.setItem("formatbase.theme", "dark"));
+  await page.evaluate(() => {
+    localStorage.setItem("formatbase.theme", "dark");
+    localStorage.setItem("codeformattools.theme", "light");
+  });
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   const values = await page.evaluate(() => ({
-    next: localStorage.getItem("codeformattools.theme"),
-    legacy: localStorage.getItem("formatbase.theme")
+    next: localStorage.getItem("codeformattertools.theme"),
+    oldBrand: localStorage.getItem("formatbase.theme"),
+    oldCodeFormat: localStorage.getItem("codeformattools.theme")
   }));
-  expect(values).toEqual({ next: "dark", legacy: null });
+  expect(values).toEqual({ next: "dark", oldBrand: null, oldCodeFormat: null });
 });
 
 for (const [path, sentinel] of [
-  ["/json-formatter", "CODEFORMATTOOLS_PRIVATE_SENTINEL_JSON_12345"],
-  ["/sql-formatter", "CODEFORMATTOOLS_PRIVATE_SENTINEL_SQL_12345"],
-  ["/yaml-validator", "CODEFORMATTOOLS_PRIVATE_SENTINEL_YAML_12345"],
-  ["/xml-validator", "CODEFORMATTOOLS_PRIVATE_SENTINEL_XML_12345"]
+  ["/json-formatter", "CODEFORMATTERTOOLS_PRIVATE_SENTINEL_987654321"],
+  ["/sql-formatter", "CODEFORMATTERTOOLS_PRIVATE_SENTINEL_987654321"],
+  ["/yaml-formatter", "CODEFORMATTERTOOLS_PRIVATE_SENTINEL_987654321"],
+  ["/xml-formatter", "CODEFORMATTERTOOLS_PRIVATE_SENTINEL_987654321"]
 ] as const) {
   test(`tool input is not transmitted for ${path}`, async ({ page }) => {
     const requests: string[] = [];
@@ -62,4 +66,25 @@ test("reduced motion preference disables active animations", async ({ page }) =>
   const duration = await page.locator(".status-dot").evaluate(element => getComputedStyle(element).animationDuration);
   const name = await page.locator(".status-dot").evaluate(element => getComputedStyle(element).animationName);
   expect(duration === "0.001ms" || duration === "0s" || name === "none").toBe(true);
+});
+
+test("worker postMessage failure recovers on the next operation", async ({ page }) => {
+  await page.addInitScript(() => {
+    const NativeWorker = window.Worker;
+    let failedOnce = false;
+    window.Worker = class RecoverableWorker extends NativeWorker {
+      postMessage(message: unknown, transfer?: Transferable[]): void {
+        if (!failedOnce) {
+          failedOnce = true;
+          throw new Error("simulated worker postMessage failure");
+        }
+        super.postMessage(message, transfer ?? []);
+      }
+    };
+  });
+  await page.goto("/json-formatter");
+  await page.getByRole("textbox", { name: "Input JSON" }).fill('{"first":true}');
+  await expect(page.locator(".diagnostic.error")).toContainText(/worker could not process/i);
+  await page.getByRole("textbox", { name: "Input JSON" }).fill('{"second":true}');
+  await expect(page.locator(".output-pane .cm-content")).toContainText('"second": true');
 });

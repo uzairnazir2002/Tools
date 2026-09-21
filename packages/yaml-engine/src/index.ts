@@ -35,6 +35,42 @@ function failure(error: unknown): Result {
   return { ok: false, output: "", diagnostics: [{ severity: "error", code: safety ? "YAML_SAFETY_LIMIT" : "YAML_ERROR", message: message === "YAML_NODE_LIMIT" ? `YAML exceeds the ${YAML_LIMITS.nodes.toLocaleString()} node safety limit.` : message.slice(0, 240) }] };
 }
 
+function hasYamlCommentSyntax(input: string): boolean {
+  let lineStart = true;
+  let previous = "\n";
+  let quote: "'" | "\"" | null = null;
+  for (let index = 0; index < input.length; index++) {
+    const character = input[index];
+    if (character === "\n" || character === "\r") {
+      lineStart = true;
+      previous = character;
+      quote = null;
+      continue;
+    }
+    if (quote === "\"") {
+      if (character === "\\" && index + 1 < input.length) index++;
+      else if (character === "\"") quote = null;
+      previous = character;
+      continue;
+    }
+    if (quote === "'") {
+      if (character === "'" && input[index + 1] === "'") index++;
+      else if (character === "'") quote = null;
+      previous = character;
+      continue;
+    }
+    if (character === "\"" || character === "'") {
+      quote = character;
+      previous = character;
+      continue;
+    }
+    if (character === "#" && (lineStart || previous === " " || previous === "\t")) return true;
+    if (lineStart && character !== " " && character !== "\t") lineStart = false;
+    previous = character;
+  }
+  return false;
+}
+
 export function runYaml(input: string, action: string, options: ToolOptions = {}): Result {
   if (action !== "format" && action !== "validate") return { ok: false, output: "", diagnostics: [{ severity: "error", code: "INVALID_ACTION", message: "Unknown YAML operation." }] };
   let lineStart = 0;
@@ -48,7 +84,7 @@ export function runYaml(input: string, action: string, options: ToolOptions = {}
     if (documents.length > YAML_LIMITS.documents) return { ok: false, output: "", diagnostics: [{ severity: "error", code: "YAML_DOCUMENT_LIMIT", message: `YAML streams are limited to ${YAML_LIMITS.documents} documents.` }] };
     guardNodes(documents);
     if (action === "validate") return { ok: true, output: "", diagnostics: [] };
-    if (input.includes("#")) return {
+    if (hasYamlCommentSyntax(input)) return {
       ok: false,
       output: "",
       diagnostics: [{

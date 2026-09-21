@@ -41,17 +41,19 @@ test("XML lossless envelope round trips attributes, comments, CDATA, and order",
   const original = '<root><!-- note --><item id="1">A &amp; B</item><![CDATA[<raw>]]></root>';
   const json = run("xml-to-json", original);
   assert.equal(json.ok, true);
-  assert.match(json.output, /codeformattools.xml.v1/);
+  assert.match(json.output, /codeformattertools.xml.v1/);
   const xml = run("json-to-xml", json.output);
   assert.equal(xml.ok, true, xml.diagnostics[0]?.message);
   assert.equal(xml.output, original);
 });
 
-test("XML lossless mode accepts legacy Formatbase envelopes during migration", () => {
-  const legacy = '{"$format":"formatbase.xml.v1","nodes":[{"root":[{"item":[{"#text":"A"}]}]}]}';
-  const xml = run("json-to-xml", legacy);
-  assert.equal(xml.ok, true, xml.diagnostics[0]?.message);
-  assert.equal(xml.output, "<root><item>A</item></root>");
+test("XML lossless mode accepts legacy envelopes during migration", () => {
+  for (const format of ["formatbase.xml.v1", "codeformattools.xml.v1"]) {
+    const legacy = `{"$format":"${format}","nodes":[{"root":[{"item":[{"#text":"A"}]}]}]}`;
+    const xml = run("json-to-xml", legacy);
+    assert.equal(xml.ok, true, xml.diagnostics[0]?.message);
+    assert.equal(xml.output, "<root><item>A</item></root>");
+  }
 });
 
 test("XML best effort maps attributes and repeated elements with warnings", () => {

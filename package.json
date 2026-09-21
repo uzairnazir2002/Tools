@@ -1,9 +1,10 @@
 {
-  "name": "codeformattools",
+  "name": "codeformattertools",
   "private": true,
   "packageManager": "pnpm@10.17.1",
   "scripts": {
     "dev": "turbo dev --filter=web",
+    "start": "pnpm --filter web start",
     "build": "turbo build",
     "lint": "eslint apps/web packages tests playwright.config.ts",
     "typecheck": "turbo typecheck",

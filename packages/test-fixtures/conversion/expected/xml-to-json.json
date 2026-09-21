@@ -1,5 +1,5 @@
 {
-  "$format": "codeformattools.xml.v1",
+  "$format": "codeformattertools.xml.v1",
   "nodes": [
     {
       "catalog": [

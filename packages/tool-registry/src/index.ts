@@ -36,7 +36,7 @@ export type Tool = {
   example: string;
 };
 
-const example = '{"project":"codeformattools","version":1,"features":["private","fast","precise"],"active":true}';
+const example = '{"project":"codeformattertools","version":1,"features":["private","fast","precise"],"active":true}';
 const jsonErrors = [
   { title: "Trailing comma", description: "A comma after the final object property or array item is invalid in strict JSON." },
   { title: "Single quotes", description: "JSON strings and property names require double quotes." },
