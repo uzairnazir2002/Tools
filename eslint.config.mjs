@@ -6,5 +6,14 @@ export default defineConfig([
   ...nextVitals,
   ...nextTs,
   { settings: { next: { rootDir: "apps/web/" }, react: { version: "19.2" } } },
-  globalIgnores(["**/.next/**", "**/next-env.d.ts", "**/*.tsbuildinfo", "**/node_modules/**"]),
+  globalIgnores([
+    "**/.next/**",
+    "**/next-env.d.ts",
+    "**/*.tsbuildinfo",
+    "**/node_modules/**",
+    "apps/web/public/**",
+    "test-results/**",
+    "playwright-report/**",
+    "coverage/**"
+  ]),
 ]);

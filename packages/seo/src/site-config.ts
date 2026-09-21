@@ -5,7 +5,7 @@ export const siteConfig = {
   url: "https://codeformattertools.com",
   description: "Fast, private developer tools for formatting, validating, minifying, sorting, and converting structured data.",
   storagePrefix: "codeformattertools",
-  legacyStoragePrefixes: ["formatbase", "codeformattools"],
+  legacyStoragePrefixes: ["codeformattools", "formatbase"],
   xmlEnvelopeFormat: "codeformattertools.xml.v1",
   legacyXmlEnvelopeFormats: ["formatbase.xml.v1", "codeformattools.xml.v1"],
 } as const;

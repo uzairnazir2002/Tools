@@ -137,10 +137,10 @@ Manifest values:
 Icon dimensions checked:
 
 - `/icon.svg`: 128 × 128
-- `/apple-touch-icon.svg`: 180 × 180
-- `/icon-192.svg`: 192 × 192
-- `/icon-512.svg`: 512 × 512
-- `/og-image.svg`: 1200 × 630
+- `/apple-touch-icon.png`: 180 × 180
+- `/icon-192.png`: 192 × 192
+- `/icon-512.png`: 512 × 512
+- `/og-image.png`: 1200 × 630
 
 ## Performance observations
 
@@ -228,3 +228,15 @@ Current source has no AdSense script, no ad network calls, no clickable empty ad
 ## Recommended first task after launch
 
 After the domain is connected and production is redeployed, run the Vercel production checklist end to end and submit the sitemap to Google Search Console and Bing Webmaster Tools.
+
+
+## Independent post-Codex hardening note
+
+A final independent source audit added two CSP directives that are safe for the current static/local-first architecture:
+
+- `script-src-attr 'none'`
+- `form-action 'self'`
+
+The production `script-src` still contains `'unsafe-inline'` because Next.js emits inline bootstrap/RSC scripts. Removing it safely would require a nonce/hash architecture and should be treated as a future defense-in-depth task rather than a launch blocker. `unsafe-eval` remains excluded from production.
+
+Social/install assets now use PNG for broad crawler/iOS compatibility, while the SVG favicon remains available. Canonical origin generation also refuses a mistyped `NEXT_PUBLIC_SITE_URL` and falls back to the fixed production origin `https://codeformattertools.com`.

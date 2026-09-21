@@ -16,6 +16,8 @@ const contentSecurityPolicy = [
   "font-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
   `script-src ${scriptSources}`,
+  "script-src-attr 'none'",
+  "form-action 'self'",
   "connect-src 'self' https://vitals.vercel-insights.com https://*.vercel-insights.com",
   "worker-src 'self' blob:",
   "manifest-src 'self'"

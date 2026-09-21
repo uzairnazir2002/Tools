@@ -4,8 +4,9 @@ import { siteConfig } from "./site-config.ts";
 export { contactEmail, siteConfig } from "./site-config.ts";
 
 export function siteOrigin(): string {
-  const configured = process.env.NEXT_PUBLIC_SITE_URL;
-  return (configured || siteConfig.url).replace(/\/$/, "");
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+  // Canonical URLs must never drift to a preview or mistyped deployment host.
+  return configured === siteConfig.url ? configured : siteConfig.url;
 }
 
 export function toolMetadata(tool: Tool) {
@@ -14,8 +15,8 @@ export function toolMetadata(tool: Tool) {
     title: tool.seo.title,
     description: tool.seo.description,
     alternates: { canonical: `/${tool.slug}` },
-    openGraph: { title: tool.seo.title, description: tool.seo.description, url, siteName: siteConfig.name, type: "website", images: [{ url: "/og-image.svg", width: 1200, height: 630, alt: siteConfig.name }] },
-    twitter: { card: "summary_large_image", title: tool.seo.title, description: tool.seo.description, images: ["/og-image.svg"] }
+    openGraph: { title: tool.seo.title, description: tool.seo.description, url, siteName: siteConfig.name, type: "website", images: [{ url: "/og-image.png", width: 1200, height: 630, alt: siteConfig.name }] },
+    twitter: { card: "summary_large_image", title: tool.seo.title, description: tool.seo.description, images: ["/og-image.png"] }
   };
 }
 

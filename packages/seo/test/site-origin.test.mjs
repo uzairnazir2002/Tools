@@ -21,3 +21,11 @@ test("siteOrigin uses final production URL when no explicit origin is configured
   process.env.NEXT_PUBLIC_SITE_URL = previousSite;
   process.env.VERCEL_URL = previousVercel;
 });
+
+
+test("siteOrigin refuses a mistyped or preview NEXT_PUBLIC_SITE_URL", () => {
+  const previousSite = process.env.NEXT_PUBLIC_SITE_URL;
+  process.env.NEXT_PUBLIC_SITE_URL = "https://codeformattools.com";
+  assert.equal(siteOrigin(), "https://codeformattertools.com");
+  process.env.NEXT_PUBLIC_SITE_URL = previousSite;
+});

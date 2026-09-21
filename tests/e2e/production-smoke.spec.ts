@@ -15,6 +15,8 @@ test("production metadata, assets, sitemap, robots, and manifest are coherent", 
 
   const response = await page.goto("/json-formatter");
   expect(response?.headers()["content-security-policy"]).toContain("frame-ancestors 'none'");
+  expect(response?.headers()["content-security-policy"]).toContain("script-src-attr 'none'");
+  expect(response?.headers()["content-security-policy"]).toContain("form-action 'self'");
   expect(response?.headers()["content-security-policy"]).not.toContain("unsafe-eval");
   expect(response?.headers()["x-content-type-options"]).toBe("nosniff");
   await expect(page.locator("link[rel='canonical']")).toHaveAttribute("href", `${productionOrigin}/json-formatter`);
@@ -29,7 +31,7 @@ test("production metadata, assets, sitemap, robots, and manifest are coherent", 
   expect(manifestJson.icons.some((icon: { sizes?: string }) => icon.sizes === "192x192")).toBe(true);
   expect(manifestJson.icons.some((icon: { sizes?: string }) => icon.sizes === "512x512")).toBe(true);
 
-  for (const asset of ["/icon.svg", "/icon-192.svg", "/icon-512.svg", "/apple-touch-icon.svg", "/og-image.svg"]) {
+  for (const asset of ["/icon.svg", "/icon-192.png", "/icon-512.png", "/apple-touch-icon.png", "/og-image.png"]) {
     const assetResponse = await request.get(asset);
     expect(assetResponse.ok()).toBe(true);
   }

@@ -4,6 +4,8 @@ test("production security headers are present and the app still executes", async
   const response = await request.get("/json-formatter");
   const headers = response.headers();
   expect(headers["content-security-policy"]).toContain("frame-ancestors 'none'");
+  expect(headers["content-security-policy"]).toContain("script-src-attr 'none'");
+  expect(headers["content-security-policy"]).toContain("form-action 'self'");
   expect(headers["content-security-policy"]).not.toContain("unsafe-eval");
   expect(headers["x-content-type-options"]).toBe("nosniff");
   expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
@@ -30,13 +32,13 @@ test("legacy browser preferences migrate to CodeFormatterTools storage keys", as
     localStorage.setItem("codeformattools.theme", "light");
   });
   await page.reload();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   const values = await page.evaluate(() => ({
     next: localStorage.getItem("codeformattertools.theme"),
     oldBrand: localStorage.getItem("formatbase.theme"),
     oldCodeFormat: localStorage.getItem("codeformattools.theme")
   }));
-  expect(values).toEqual({ next: "dark", oldBrand: null, oldCodeFormat: null });
+  expect(values).toEqual({ next: "light", oldBrand: null, oldCodeFormat: null });
 });
 
 for (const [path, sentinel] of [
